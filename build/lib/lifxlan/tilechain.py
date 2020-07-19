@@ -219,42 +219,11 @@ class TileChain(Light):
                   "palette": response.palette}
         return effect
 
-    def set_tile_effect(self, instanceid=0, effect_type=0, speed=0, palette=[], duration=0, rapid=False):
-        # print(f'{palette}, {instanceid}, {effect_type}, {speed}, {duration}')
+    def set_tile_effect(self, palette=[], instanceid=0, effect_type=0, speed=0, duration=0, rapid=False):
         if len(palette)>16:
             raise InvalidParameterException("Maximum palette size is 16, {} given.".format(len(palette)))
 
         # parameters is not currently used by any effect, so just zero these out for now
-        print('set paramaters')
-        parameters = []
-        for i in range(8):
-            parameters.append(0)
-        
-        print('paramaters set')
-
-        payload = {"reserved1": 0,
-                   "reserved2": 0,
-                   "instanceid": instanceid,
-                   "type": effect_type,
-                   "speed": speed,
-                   "duration": duration,
-                   "reserved3": 0,
-                   "reserved4": 0,
-                   "parameters": parameters,
-                   "palette_count": len(palette),
-                   "palette": palette}
-
-        if not rapid:
-            print(f'non rapid send {payload}')
-            self.req_with_ack(SetTileEffect, payload)
-        else:
-            self.fire_and_forget(SetTileEffect, payload, num_repeats=1)
-
-    def set_tile_effect2(self, palette=[], instanceid=0, effect_type=0, speed=0, duration=0, rapid=False):
-        print(f'{palette}, {instanceid}, {effect_type}, {speed}, {duration}')
-        if len(palette)>16:
-            raise InvalidParameterException("Maximum palette size is 16, {} given.".format(len(palette)))
-
         parameters = []
         for i in range(8):
             parameters.append(0)
@@ -271,7 +240,6 @@ class TileChain(Light):
                    "palette_count": len(palette),
                    "palette": palette}
         if not rapid:
-            print(f'non rapid send {payload}')
             self.req_with_ack(SetTileEffect, payload)
         else:
             self.fire_and_forget(SetTileEffect, payload, num_repeats=1)
